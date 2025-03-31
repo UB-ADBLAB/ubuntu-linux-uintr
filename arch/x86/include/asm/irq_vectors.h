@@ -95,6 +95,11 @@
 #define HYPERV_STIMER0_VECTOR		0xed
 #endif
 
+/*
+ * Was 0xec, 0xeb, 0xea in the archived intel uintr kernel.
+ */
+#define UINTR_NOTIFICATION_VECTOR       0xe1
+#define UINTR_KERNEL_VECTOR		0xe2
 #define LOCAL_TIMER_VECTOR		0xec
 
 /*

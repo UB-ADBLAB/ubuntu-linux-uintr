@@ -72,6 +72,10 @@
 #include <linux/security.h>
 #include <asm/shmparam.h>
 
+#ifdef CONFIG_X86_USER_INTERRUPTS
+#include <asm/uintr.h>
+#endif
+
 #define CREATE_TRACE_POINTS
 #include <trace/events/io_uring.h>
 
@@ -567,6 +571,11 @@ void __io_commit_cqring_flush(struct io_ring_ctx *ctx)
 	}
 	if (ctx->has_evfd)
 		io_eventfd_flush_signal(ctx);
+
+#ifdef CONFIG_X86_USER_INTERRUPTS
+	if (ctx->cq_uintr_f)
+		uintr_notify(ctx->cq_uintr_f);
+#endif
 }
 
 static inline void __io_cq_lock(struct io_ring_ctx *ctx)
@@ -2625,6 +2634,7 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
 		__io_sqe_files_unregister(ctx);
 	io_cqring_overflow_kill(ctx);
 	io_eventfd_unregister(ctx);
+	io_uintr_unregister(ctx);
 	io_alloc_cache_free(&ctx->apoll_cache, kfree);
 	io_alloc_cache_free(&ctx->netmsg_cache, io_netmsg_cache_free);
 	io_alloc_cache_free(&ctx->rw_cache, io_rw_cache_free);

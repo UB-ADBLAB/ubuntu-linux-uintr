@@ -615,6 +615,13 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 
 	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ENTRY) &&
 		     this_cpu_read(pcpu_hot.hardirq_stack_inuse));
+	
+	/* 
+	 * TODO (mbeards): Double check if we also need to do something that
+	 * switch_uintr_prepare() does.
+	 */
+	if (cpu_feature_enabled(X86_FEATURE_UINTR))
+		switch_uintr_prepare(prev_p);
 
 	if (!test_tsk_thread_flag(prev_p, TIF_NEED_FPU_LOAD))
 		switch_fpu_prepare(prev_p, cpu);
@@ -675,6 +682,9 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 
 	/* Reload sp0. */
 	update_task_stack(next_p);
+
+	if (cpu_feature_enabled(X86_FEATURE_UINTR))
+		switch_uintr_finish(next_p);
 
 	switch_to_extra(prev_p, next_p);
 

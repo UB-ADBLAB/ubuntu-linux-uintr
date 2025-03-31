@@ -9,6 +9,7 @@ struct task_struct;
 struct mm_struct;
 struct io_bitmap;
 struct vm86;
+struct uintr_receiver;
 
 #include <asm/math_emu.h>
 #include <asm/segment.h>
@@ -488,6 +489,17 @@ struct thread_struct {
 	unsigned long		iopl_emul;
 
 	unsigned int		iopl_warn:1;
+
+#ifdef CONFIG_X86_USER_INTERRUPTS
+	/* User Interrupt state*/
+
+	/* Signifies whether the MSRs for that thread are active */
+	unsigned int		uitt_activated:1;
+	unsigned int		upid_activated:1;
+
+	/* Pointer to the UPID context for the task */
+	struct uintr_upid_ctx	*upid_ctx;
+#endif
 
 	/*
 	 * Protection Keys Register for Userspace.  Loaded immediately on

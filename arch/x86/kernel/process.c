@@ -96,6 +96,20 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
 #ifdef CONFIG_VM86
 	dst->thread.vm86 = NULL;
 #endif
+
+#ifdef CONFIG_X86_USER_INTERRUPTS
+	/* User Interrupt receiver upid state is unique for each task */
+	dst->thread.upid_ctx = NULL;
+
+	dst->thread.upid_activated = false;
+
+	/*
+	 * User Interrupt sender state is shared across tasks of the same mm.
+	 * However, the UITT is activated on-demand
+	 */
+	dst->thread.uitt_activated = false;
+#endif
+
 	/* Drop the copied pointer to current's fpstate */
 	dst->thread.fpu.fpstate = NULL;
 
@@ -122,6 +136,8 @@ void exit_thread(struct task_struct *tsk)
 		io_bitmap_exit(tsk);
 
 	free_vm86(t);
+
+	uintr_free(tsk);
 
 	shstk_free(tsk);
 	fpu__drop(fpu);

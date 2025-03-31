@@ -595,6 +595,11 @@ enum io_uring_register_op {
 	IORING_REGISTER_NAPI			= 27,
 	IORING_UNREGISTER_NAPI			= 28,
 
+	/* User Interrupts based notification */
+	/* Skip a few numbers to avoid upstream clashes */
+	IORING_REGISTER_UINTR			= 31,
+	IORING_UNREGISTER_UINTR			= 32,
+
 	/* this goes last */
 	IORING_REGISTER_LAST,
 
