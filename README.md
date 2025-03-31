@@ -11,5 +11,6 @@ implementation at https://github.com/intel/uintr-linux-kernel (from
     cp myconfig .config
     make -j NPROCS # replace NPROCS with the number of parallel processes you'd like
     make bzImage
+    sudo make modules_install
     sudo make install
     sudo make headers_install ARCH=x86 INSTALL_HDR_PATH=/usr/uintr-kernel # installs to /usr/uintr-kernel/include
