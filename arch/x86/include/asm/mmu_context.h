@@ -13,6 +13,7 @@
 #include <asm/paravirt.h>
 #include <asm/debugreg.h>
 #include <asm/gsseg.h>
+#include <asm/uintr.h>
 
 extern atomic64_t last_mm_ctx_id;
 

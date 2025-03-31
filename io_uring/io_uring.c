@@ -108,6 +108,8 @@
 #include "alloc_cache.h"
 #include "eventfd.h"
 
+#include "uintr.h"
+
 #define IORING_MAX_ENTRIES	32768
 #define IORING_MAX_CQ_ENTRIES	(2 * IORING_MAX_ENTRIES)
 
