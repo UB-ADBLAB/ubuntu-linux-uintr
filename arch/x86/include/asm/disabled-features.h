@@ -129,6 +129,12 @@
 #define DISABLE_SEV_SNP		(1 << (X86_FEATURE_SEV_SNP & 31))
 #endif
 
+#ifdef CONFIG_X86_USER_INTERRUPTS
+# define DISABLE_UINTR		0
+#else
+# define DISABLE_UINTR		1
+#endif
+
 /*
  * Make sure to add features to the correct mask
  */
