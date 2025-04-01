@@ -9,7 +9,7 @@ implementation at https://github.com/intel/uintr-linux-kernel (from
 # How to build
 
     cp myconfig .config
-    make -j NPROCS # replace NPROCS with the number of parallel processes you'd like
+    make LOCALVERSION= -j NPROCS # replace NPROCS with the number of parallel processes you'd like
     make bzImage
     sudo make modules_install
     sudo make install

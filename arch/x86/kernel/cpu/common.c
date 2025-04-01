@@ -390,11 +390,18 @@ static void setup_uintr(struct cpuinfo_x86 *c)
 	if (!cpu_has(c, X86_FEATURE_UINTR))
 		goto disable_uintr;
 
-	/* Confirm XSAVE support for UINTR is present. */
-	if (!cpu_has_xfeatures(XFEATURE_MASK_UINTR, NULL)) {
-		pr_info_once("x86: User Interrupts (UINTR) not enabled. XSAVE support for UINTR is missing.\n");
-		goto clear_uintr_cap;
-	}
+	/*
+	 * NOTE: Removing the checking of XSAVE support for UINTR. This
+	 * causes the system to disable uintr cap even if XSAVE support for UINTR is
+	 * available. The issue is xfeatures has not been properly set up at this
+	 * point on the boot CP (before fpu__init_system_xstate in fpu/xstate.c is
+	 * called) in 6.11. It probably is redundance as they both appeared starting
+	 * in Sapphire Rapids.
+	 */
+	//if (!cpu_has_xfeatures(XFEATURE_MASK_UINTR, NULL)) {
+	//	pr_info_once("x86: User Interrupts (UINTR) not enabled. XSAVE support for UINTR is missing.\n");
+	//	goto clear_uintr_cap;
+	//}
 
 	/*
 	 * User Interrupts currently doesn't support PTI. For processors that
